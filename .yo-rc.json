@@ -1,0 +1,20 @@
+{
+  "generator-dotup-typescript": {
+    "promptValues": {
+      "useGit": true,
+      "useGithub": true,
+      "projectType": "lib"
+    }
+  },
+  "generator-dotup-npm-package": {
+    "promptValues": {
+      "userName": "",
+      "userEmail": "xferro@gmail.com"
+    }
+  },
+  "generator-dotup-github": {
+    "promptValues": {
+      "githubUserName": "xaviferro"
+    }
+  }
+}

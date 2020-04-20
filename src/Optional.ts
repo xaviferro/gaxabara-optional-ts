@@ -15,9 +15,6 @@ function assertOn(condition: boolean, errorMessage: string): void {
  * Additional methods that depend on the presence or absence of a contained value are provided, such as orElse()
  * (returns a default value if no value is present) and ifPresent() (performs an action if a value is present).
  *
- * This is a value-based class; use of identity-sensitive operations (including reference equality (==),
- * identity hash code, or synchronization) on instances of Optional may have unpredictable results and should be avoided.
- *
  * API Note: Optional is primarily intended for use as a method return type where there is a clear need to represent
  * "no result," and where using null is likely to cause errors. A variable whose type is Optional should never itself
  * be null; it should always point to an Optional instance.
@@ -163,11 +160,7 @@ export class Optional<T> {
    * Return the value if present, otherwise invoke fn  and return the result of that invocation.
    */
   orElseGet (fn: Function): T {
-    if (this.isPresent()) {
-      return this.#value;
-    } else {
-      return fn();
-    }
+    return (this.isPresent()) ? this.#value : fn();
   }
 
   /**
@@ -188,7 +181,7 @@ export class Optional<T> {
   }
 
   /**
-   * Return the contained value, if present, otherwise throw an exception to be created by the provided fn. 
+   * Return the contained value, if present, otherwise throw an exception to be created by the provided fn.
    */
   orElseThrow (fn: Function): T {
     if (this.isPresent()) {

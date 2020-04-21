@@ -184,7 +184,7 @@ export class Optional<T> {
       return this;
     } else {
       const result: Optional<T> = fn();
-      assertOn(isNullOrUndefined(result), "provided function returns null or undefined result");
+      assertOn(isNullOrUndefined(result), 'provided function returns null or undefined result');
 
       return result;
     }

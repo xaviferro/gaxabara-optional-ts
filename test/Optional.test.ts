@@ -5,12 +5,17 @@ import { Optional } from '../src/Optional';
 const presetValueFn = (value: string) => {
     return (input: string) => value;
 };
+
+const presetOptionalValueFn = (value: string) => {
+    return (input: string):Optional<String> => new Optional(value);
+};
+
 const errorOnInvokeFn = (errorMsg: string) => {
     return (_: string) => new Error(errorMsg);
 };
 
 describe('Optional.empty', () => {
-    const opt = Optional.empty<String>();
+    const opt = Optional.empty<string>();
 
     it('throws an exception if invoking get', (done) => {
         try {
@@ -61,13 +66,19 @@ describe('Optional.empty', () => {
     });
 
     it('does not invoke the filter function', (done) => {
-        opt.filter(errorOnInvokeFn('Should not be invoked'));
+        opt.filter((_: string): boolean => {
+            done(new Error('Should not be invoked'));
+            return false;
+        });
         done();
     });
 
     it('does return an empty optional when invoking map', (done) => {
         try {
-            expect(opt.map(errorOnInvokeFn('Should not be invoked')).get());
+            expect(opt.map((_: string): boolean => {
+                done(new Error('Should not be invoked'));
+                return true;
+            }).get());
             done(new Error('Should not be reach this point'));
         } catch (err) {
             done();
@@ -76,7 +87,10 @@ describe('Optional.empty', () => {
 
     it('does return an empty optional when invoking flatmap', (done) => {
         try {
-            expect(opt.flatMap(errorOnInvokeFn('Should not be invoked')).get());
+            expect(opt.flatMap((_: string): Optional<boolean> => {
+                done(new Error('Should not be invoked'));
+                return new Optional<boolean>(true);
+            }).get());
             done(new Error('Should not be reach this point'));
         } catch (err) {
             done();
@@ -100,23 +114,24 @@ describe('Optional.empty', () => {
         });
 
         it('does return the value from the function', (done) => {
-            const result = opt.or(presetValueFn("hello"));
+            const result = opt.or(() => new Optional('hello'));
             expect(result.get()).to.equals('hello');
             done();
+        });
+
+        it('throws an error if provided function returns null value', (done) => {
+            try {
+                opt.or(() => null);
+            } catch (err) {
+                done();
+            }
         });
     });
 
     describe('orElseGet', () => {
         it('does invoke the supplier', (done) => {
-            var throwError = true;
-            var supplier = function() {
-                done();
-                throwError = false;
-            };
-            opt.orElseGet(supplier);
-            if (throwError) {
-                done(new Error('Should invoke the supplier instead'));
-            }
+            expect(opt.orElseGet(() => 'invoked')).to.equals('invoked');
+            done();
         });
 
         it('does throw an exception if the supplier is null', (done) => {
@@ -132,7 +147,7 @@ describe('Optional.empty', () => {
     describe('orElseThrow', () => {
         it('invokes the exception supplier', (done) => {
             try {
-                opt.orElseThrow(errorOnInvokeFn('hello'));
+                opt.orElseThrow(() => new Error('Throw up'));
                 done(new Error('Should have thrown an exception'));
             } catch (err) {
                 done();
@@ -184,6 +199,16 @@ describe('Optional.of', () => {
     });
 
     describe('ifPresent', () => {
+        it('throws an error if the function is null/undefined', (done) => {
+            try {
+                opt.ifPresent(null);
+                done(new Error('Should fail on ifPresent with null function'));
+            } catch (err) {
+                done();
+            }
+        });
+
+
         it('invokes the consumer and keeps the value', (done) => {
             var input = "hello",
                 argument;
@@ -250,7 +275,7 @@ describe('Optional.of', () => {
     describe('flatMap', () => {
         it('throws an exception if the mapper returns null', (done) => {
             try {
-                opt.flatMap(presetValueFn(undefined));
+                opt.flatMap((value: string) => undefined);
                 done(new Error('Should throw an exception when returning null'));
             } catch (err) {
                 done();
@@ -260,7 +285,7 @@ describe('Optional.of', () => {
 
     describe('or', () => {
         it('returns the inner value', (done) => {
-            expect(opt.or(errorOnInvokeFn('Should not invoke')).get()).to.equals('hello');
+            expect(opt.or(() => new Optional<string>('goodbye')).get()).to.equals('hello');
             done();
         });
     });
@@ -277,7 +302,7 @@ describe('Optional.of', () => {
         });
 
         it('returns the defined value when invoking orElseThrow', (done) => {
-            expect(opt.orElseThrow(errorOnInvokeFn('Should not invoke'))).to.equals('hello');
+            expect(opt.orElseThrow(() => new Error('Should not invoke'))).to.equals('hello');
             done();
         });
     });

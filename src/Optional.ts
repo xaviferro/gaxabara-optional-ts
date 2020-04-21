@@ -33,6 +33,8 @@ export class Optional<T> {
   /**
    * Returns an Optional with the specified present non-null value. If null or undefined,
    * it will throw an Error.
+   *
+   * @throws error if value is null or undefined
    */
   // tslint:disable-next-line: no-reserved-keywords
   static of<T> (value: T): Optional<T> {
@@ -57,6 +59,8 @@ export class Optional<T> {
 
   /**
    * If a value is present in this Optional, returns the value, otherwise throws Error.
+   *
+   * @throws error if no value is present
    */
   // tslint:disable-next-line: no-reserved-keywords
   get(): T {
@@ -84,7 +88,7 @@ export class Optional<T> {
    *
    * @param fn with the value as an argument
    */
-  ifPresent(fn: Function) {
+  ifPresent(fn?: (value: T) => void) {
     if (this.isPresent()) {
       fn(this.#value);
     }
@@ -96,7 +100,7 @@ export class Optional<T> {
    * @param nonEmptyFn the function to be invoked, if a value is present with that value as argument.
    * @param emptyFn the empty-based action to be invoked, if no value is present.
    */
-  ifPresentOrElse(nonEmptyFn: Function, emptyFn: Function): void {
+  ifPresentOrElse(nonEmptyFn: (value: T) => void, emptyFn: () => void): void {
     if (this.isPresent()) {
       nonEmptyFn(this.#value);
     } else {
@@ -110,7 +114,7 @@ export class Optional<T> {
    *
    * @param fn filter function that takes the value as an argument.
    */
-  filter(fn: Function): Optional<T> {
+  filter(fn: (value: T) => boolean): Optional<T> {
     if (this.isEmpty()) {
       return this;
     } else {
@@ -124,9 +128,9 @@ export class Optional<T> {
    *
    * @param fn with the value as an argument
    */
-  map(fn: Function): Optional<T> {
+  map<U> (fn: (value: T) => U): Optional<U> {
     if (this.isEmpty()) {
-      return this;
+      return new Optional<U> (undefined);
     } else {
       return new Optional(fn(this.#value));
     }
@@ -137,15 +141,16 @@ export class Optional<T> {
    * return that result, otherwise return an empty Optional.
    *
    * @param fn mapping function that takes the value as argument
+   * @throws error if the mapping function is null or returns a null result
    */
-  flatMap(fn: Function): Optional<T> {
+  flatMap<U> (fn: (value: T) => Optional<U>): Optional<U> {
     if (this.isEmpty()) {
-      return this;
+      return new Optional<U>(undefined);
     } else {
-      const flatMappedValue: Optional<T> = fn(this.#value);
-      assertOn(isNullOrUndefined(flatMappedValue), 'Mapper must not return a null or undefined value');
+      const result: Optional<U> = fn(this.#value);
+      assertOn(isNullOrUndefined(result), 'Mapping function cannot return null/undefined value');
 
-      return flatMappedValue;
+      return result;
     }
   }
 
@@ -159,7 +164,7 @@ export class Optional<T> {
   /**
    * Return the value if present, otherwise invoke fn  and return the result of that invocation.
    */
-  orElseGet (fn: Function): T {
+  orElseGet (fn: () => T): T {
     return (this.isPresent()) ? this.#value : fn();
   }
 
@@ -171,19 +176,24 @@ export class Optional<T> {
    *
    * @returns an Optional describing the value of this Optional, if a value is present,
    *          otherwise an Optional produced by the supplying function.
+   *
+   * @throws if provided function produces a null result.
    */
-  or(fn: Function): Optional<T> {
+  or(fn: () => Optional<T>): Optional<T> {
     if (this.isPresent()) {
       return this;
     } else {
-      return new Optional(fn());
+      const result: Optional<T> = fn();
+      assertOn(isNullOrUndefined(result), "provided function returns null or undefined result");
+
+      return result;
     }
   }
 
   /**
    * Return the contained value, if present, otherwise throw an exception to be created by the provided fn.
    */
-  orElseThrow (fn: Function): T {
+  orElseThrow (fn: () => void): T {
     if (this.isPresent()) {
       return this.#value;
     } else {

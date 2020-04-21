@@ -162,7 +162,11 @@ describe('Optional.empty', () => {
 });
 
 describe('Optional.of', () => {
-    const opt = Optional.of('hello');
+    let opt: Optional<string>;
+
+    before(() => {
+        opt = Optional.of('hello');
+    });
 
     describe('creation', () => {
         it('can invoke get successfully', () => {

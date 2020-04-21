@@ -5,17 +5,10 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
-    "gulp": "^4.0.2",
-    "gulp-mocha": "^7.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-tslint": "^8.1.4",
-    "gulp-typedoc": "^2.2.5",
-    "gulp-typescript": "^6.0.0-alpha.1",
     "mocha": "^7.1.1",
     "ts-node": "^8.8.2",
     "tslint": "^6.1.1",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typedoc": "^0.17.4",
     "typescript": "^3.8.3",
     "uglify-js": "^3.9.1"
   },
@@ -28,6 +21,7 @@
   },
   "homepage": "https://github.com/xaviferro/gaxabara-optional-ts#readme",
   "scripts": {
+    "clean": "mkdir -p ./dist && rm -rf ./dist/*",
     "build": "tsc && npm run minify",
     "test": "node node_modules/mocha/bin/mocha --require ts-node/register test/*.test.ts --reporter spec",
     "minify": "uglifyjs ./dist/index.js > ./dist/index.min.js"

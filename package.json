@@ -40,7 +40,7 @@
     "gh-pages": "rimraf docs && npm run docs && gh-pages -d docs",
     "npm-publish": "npm publish"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "name": "gaxabara-optional-ts",
   "author": {
     "name": "",

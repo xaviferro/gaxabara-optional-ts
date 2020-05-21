@@ -1,12 +1,14 @@
 {
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/optional.js",
+  "types": "dist/optional.d.ts",
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
+    "browserify": "^16.5.1",
     "chai": "^4.2.0",
     "mocha": "^7.1.1",
     "ts-node": "^8.8.2",
+    "tsify": "^4.0.1",
     "tslint": "^6.1.1",
     "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^3.8.3",
@@ -22,15 +24,15 @@
   "homepage": "https://github.com/xaviferro/gaxabara-optional-ts#readme",
   "scripts": {
     "clean": "mkdir -p ./dist && rm -rf ./dist/*",
-    "build": "tsc && npm run minify",
+    "build": "npm run clean && browserify src/optional.ts -p [ tsify --noImplicitAny ] > dist/optional.js --declaration",
     "test": "node node_modules/mocha/bin/mocha --require ts-node/register test/*.test.ts --reporter spec",
-    "minify": "uglifyjs ./dist/index.js > ./dist/index.min.js"
+    "minify": "uglifyjs --compress --mangle --output ./dist/optional.min.js -- ./dist/optional.js"
   },
   "version": "0.0.1",
   "name": "gaxabara-optional-ts",
   "description": "Optionals in Typescript",
   "author": {
-    "name": "",
+    "name": "Xavier Ferro",
     "email": "xferro@gmail.com"
   }
 }

@@ -10,11 +10,12 @@
     "src/**/*.spec.ts"
   ],
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2015",
+    "downlevelIteration": true,
     "module": "commonjs",
+    "removeComments": true,
     "lib": [
-      "es6",
-      "es2017",
+      "es2015",
       "dom"
     ],
     "declaration": true,

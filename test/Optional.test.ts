@@ -2,11 +2,11 @@
 import { expect } from 'chai';
 import { Optional } from '../src/Optional';
 
-const presetValueFn = (value: string) => {
-    return (input: string) => value;
+const presetValueFn = (value: String) => {
+    return (input: String) => value;
 };
 
-const presetOptionalValueFn = (value: string) => {
+const presetOptionalValueFn = (value: String) => {
     return (input: string): Optional<String> => new Optional(value);
 };
 
@@ -15,10 +15,10 @@ const errorOnInvokeFn = (errorMsg: string) => {
 };
 
 describe('Optional.empty', () => {
-    let opt: Optional<string>;
+    let opt: Optional<String>;
 
     before(() => {
-        opt = Optional.empty<string> ();
+        opt = Optional.empty<String> ();
     });
 
     it('throws an exception if invoking get', (done) => {
@@ -66,7 +66,7 @@ describe('Optional.empty', () => {
     });
 
     it('does not invoke the filter function', (done) => {
-        opt.filter((_: string): boolean => {
+        opt.filter((_: String): boolean => {
             done(new Error('Should not be invoked'));
             return false;
         });
@@ -75,7 +75,7 @@ describe('Optional.empty', () => {
 
     it('does return an empty optional when invoking map', (done) => {
         try {
-            expect(opt.map((_: string): boolean => {
+            expect(opt.map((_: String): boolean => {
                 done(new Error('Should not be invoked'));
                 return true;
             }).get());
@@ -87,7 +87,7 @@ describe('Optional.empty', () => {
 
     it('does return an empty optional when invoking flatmap', (done) => {
         try {
-            expect(opt.flatMap((_: string): Optional<boolean> => {
+            expect(opt.flatMap((_: String): Optional<boolean> => {
                 done(new Error('Should not be invoked'));
                 return new Optional<boolean>(true);
             }).get());
@@ -206,9 +206,9 @@ describe('Optional.of', () => {
         });
 
         it('invokes the consumer and keeps the value', () => {
-            const input: string = 'hello';
-            let argument: string;
-            const consumer = (inx: string) => {
+            const input: String = 'hello';
+            let argument: String;
+            const consumer = (inx: String) => {
                 argument = inx;
             };
             const result = opt.ifPresent(consumer);
@@ -219,9 +219,9 @@ describe('Optional.of', () => {
 
     describe('ifPresentOrElse', () => {
         it('invokes the nonEmptyFn if value present and keeps the value', () => {
-            const input: string = 'hello';
-            let argument: string;
-            const consumer = (inx: string) => {
+            const input: String = 'hello';
+            let argument: String;
+            const consumer = (inx: String) => {
                 argument = inx;
             };
             opt.ifPresentOrElse(consumer, () => {});
@@ -270,7 +270,7 @@ describe('Optional.of', () => {
     describe('flatMap', () => {
         it('throws an exception if the mapper returns null', (done) => {
             try {
-                opt.flatMap((value: string) => undefined);
+                opt.flatMap((value: String) => undefined);
                 done(new Error('Should throw an exception when returning null'));
             } catch (err) {
                 done();
@@ -300,7 +300,7 @@ describe('Optional.of', () => {
 
     it('stream does not return immediately', () => {
         let total = 0;
-        let result = 'notset';
+        let result:string = 'notset';
 
         for (let value of opt) {
             total++;

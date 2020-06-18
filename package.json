@@ -24,7 +24,7 @@
   "homepage": "https://github.com/xaviferro/gaxabara-optional-ts#readme",
   "scripts": {
     "clean": "mkdir -p ./dist && rm -rf ./dist/*",
-    "build": "npm run clean && browserify src/optional.ts -p [ tsify --noImplicitAny ] > dist/optional.js --declaration",
+    "build": "tsc",
     "test": "node node_modules/mocha/bin/mocha --require ts-node/register test/*.test.ts --reporter spec",
     "minify": "uglifyjs --compress --mangle --output ./dist/optional.min.js -- ./dist/optional.js"
   },

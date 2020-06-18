@@ -28,7 +28,7 @@
     "test": "node node_modules/mocha/bin/mocha --require ts-node/register test/*.test.ts --reporter spec",
     "minify": "uglifyjs --compress --mangle --output ./dist/optional.min.js -- ./dist/optional.js"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "name": "gaxabara-optional-ts",
   "description": "Optionals in Typescript",
   "author": {

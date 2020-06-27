@@ -25,7 +25,7 @@
     "test": "jest --verbose --config jestconfig.json",
     "minify": "uglifyjs --compress --mangle --output ./dist/optional.min.js -- ./dist/optional.js"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "name": "gaxabara-optional-ts",
   "description": "Optionals in Typescript",
   "author": {

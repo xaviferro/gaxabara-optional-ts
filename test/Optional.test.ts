@@ -1,5 +1,3 @@
-
-import { expect } from 'chai';
 import { Optional } from '../src/Optional';
 
 const presetValueFn = (value: String) => {
@@ -15,11 +13,7 @@ const errorOnInvokeFn = (errorMsg: string) => {
 };
 
 describe('Optional.empty', () => {
-    let opt: Optional<String>;
-
-    before(() => {
-        opt = Optional.empty<String> ();
-    });
+    const opt: Optional<String> = Optional.empty<String> ();
 
     it('throws an exception if invoking get', (done) => {
         try {
@@ -31,11 +25,11 @@ describe('Optional.empty', () => {
     });
 
     it('returns true when invoking isEmpty', () => {
-        expect(opt.isEmpty()).to.equal(true);
+        expect(opt.isEmpty()).toBe(true);
     });
 
     it('returns false when invoking isPresent', () => {
-        expect(opt.isPresent()).to.equal(false);
+        expect(opt.isPresent()).toBe(false);
     });
 
     it('does not invoke ifPresent consumer', (done) => {
@@ -51,7 +45,7 @@ describe('Optional.empty', () => {
         for (let {} of opt) {
             total = total + 1;
         }
-        expect(total).to.equal(0);
+        expect(total).toBe(0);
     });
 
     describe('ifPresentOrElse', () => {
@@ -61,7 +55,7 @@ describe('Optional.empty', () => {
                 argument = "set";
             };
             opt.ifPresentOrElse(() => {}, consumer);
-            expect(argument).to.equals("set");
+            expect(argument).toBe("set");
         });
     });
 
@@ -98,7 +92,7 @@ describe('Optional.empty', () => {
     });
 
     it('does return the other when orElse', () => {
-        expect(opt.orElse('goodbye')).to.equals('goodbye');
+        expect(opt.orElse('goodbye')).toBe('goodbye');
     });
 
     describe('or', () => {
@@ -113,7 +107,7 @@ describe('Optional.empty', () => {
 
         it('does return the value from the function', () => {
             const result = opt.or(() => new Optional('hello'));
-            expect(result.get()).to.equals('hello');
+            expect(result.get()).toBe('hello');
         });
 
         it('throws an error if provided function returns null value', (done) => {
@@ -128,7 +122,7 @@ describe('Optional.empty', () => {
 
     describe('orElseGet', () => {
         it('does invoke the supplier', () => {
-            expect(opt.orElseGet(() => 'invoked')).to.equals('invoked');
+            expect(opt.orElseGet(() => 'invoked')).toBe('invoked');
         });
 
         it('does throw an exception if the supplier is null', (done) => {
@@ -162,15 +156,11 @@ describe('Optional.empty', () => {
 });
 
 describe('Optional.of', () => {
-    let opt: Optional<string>;
-
-    before(() => {
-        opt = Optional.of('hello');
-    });
+    const opt: Optional<string> = Optional.of('hello');
 
     describe('creation', () => {
         it('can invoke get successfully', () => {
-            expect(opt.get()).to.equals('hello');
+            expect(opt.get()).toBe('hello');
         });
 
         it('throws an exception when creating with a null value', (done) => {
@@ -185,13 +175,13 @@ describe('Optional.of', () => {
 
     describe('isPresent', () => {
         it('returns true when invoking isPresent', () => {
-            expect(opt.isPresent()).to.be.true;
+            expect(opt.isPresent()).toBe(true);
         });
     });
 
     describe('isEmpty', () => {
         it('returns false when invoking isEmpty', () => {
-            expect(opt.isEmpty()).to.be.false;
+            expect(opt.isEmpty()).toBe(false)
         });
     });
 
@@ -212,8 +202,7 @@ describe('Optional.of', () => {
                 argument = inx;
             };
             const result = opt.ifPresent(consumer);
-            expect(argument)
-                .equals(input);
+            expect(argument).toBe(input);
         });
     });
 
@@ -225,8 +214,7 @@ describe('Optional.of', () => {
                 argument = inx;
             };
             opt.ifPresentOrElse(consumer, () => {});
-            expect(argument).to
-                .equals(input);
+            expect(argument).toBe(input);
         });
     });
 
@@ -234,8 +222,7 @@ describe('Optional.of', () => {
         it('invokes the filter that evals to true', () => {
             const filter = (input: String) => true;
             const result = opt.filter(filter);
-            expect(result.get()).to
-                .equals('hello');
+            expect(result.get()).toBe('hello');
         });
 
         it('invokes the filter that evals to false', (done) => {
@@ -263,7 +250,7 @@ describe('Optional.of', () => {
 
         it('creates an optional when the mapper returns not null', () => {
             const result = opt.map(presetValueFn('goodbye'));
-            expect(result.get()).to.equals('goodbye');
+            expect(result.get()).toBe('goodbye');
         });
     });
 
@@ -280,21 +267,21 @@ describe('Optional.of', () => {
 
     describe('or', () => {
         it('returns the inner value', () => {
-            expect(opt.or(() => new Optional<string>('goodbye')).get()).to.equals('hello');
+            expect(opt.or(() => new Optional<string>('goodbye')).get()).toBe('hello');
         });
     });
 
     describe('orElses', () => {
         it('returns the defined value when invoking orElse', () => {
-            expect(opt.orElse('goodbye')).to.equals('hello');
+            expect(opt.orElse('goodbye')).toBe('hello');
         });
 
         it('returns the defined value when invoking orElseGet', () => {
-            expect(opt.orElseGet((): string => 'goodbye')).to.equals('hello');
+            expect(opt.orElseGet((): string => 'goodbye')).toBe('hello');
         });
 
         it('returns the defined value when invoking orElseThrow', () => {
-            expect(opt.orElseThrow(() => new Error('Should not invoke'))).to.equals('hello');
+            expect(opt.orElseThrow(() => new Error('Should not invoke'))).toBe('hello');
         });
     });
 
@@ -306,8 +293,8 @@ describe('Optional.of', () => {
             total++;
             result = value;
         }
-        expect(total).to.be.equal(1);
-        expect(result).to.equals('hello');
+        expect(total).toBe(1);
+        expect(result).toBe('hello');
     });
 
     it('is able to iterate over same optional multiple times', () => {
@@ -319,20 +306,20 @@ describe('Optional.of', () => {
         for ({} of opt) {
             total = total + 1;
         }
-        expect(total).to.be.equal(2);
+        expect(total).toBe(2);
     });
 });
 
 describe('Optional.ofNullable', () => {
     it('does not throw an exception on creation with null value', () => {
         const opt = Optional.ofNullable(undefined);
-        expect(opt.isPresent()).to.be.false;
+        expect(opt.isPresent()).toBe(false);
     });
 
     it('does not throw an exception on creation with non null value', () => {
         const opt = Optional.ofNullable('hello');
-        expect(opt.isPresent()).to.be.true;
-        expect(opt.get()).to.equals('hello');
+        expect(opt.isPresent()).toBe(true);
+        expect(opt.get()).toBe('hello');
 
     });
 });

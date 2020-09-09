@@ -2,14 +2,17 @@
   "main": "dist/optional.js",
   "types": "dist/optional.d.ts",
   "devDependencies": {
+    "@babel/preset-typescript": "^7.10.4",
     "@types/jest": "^26.0.3",
     "jest": "^26.1.0",
     "ts-jest": "^26.1.1",
+    "ts-loader": "^8.0.3",
     "ts-node": "^8.8.2",
-    "tsify": "^4.0.1",
-    "tslint": "^6.1.1",
+    "tslint": "^6.1.3",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "repository": {
     "type": "git",
@@ -21,9 +24,8 @@
   "homepage": "https://github.com/xaviferro/gaxabara-optional-ts#readme",
   "scripts": {
     "clean": "mkdir -p ./dist && rm -rf ./dist/*",
-    "build": "tsc",
-    "test": "jest --verbose --config jestconfig.json",
-    "minify": "uglifyjs --compress --mangle --output ./dist/optional.min.js -- ./dist/optional.js"
+    "build": "webpack",
+    "test": "jest --coverage --verbose --config jestconfig.json"
   },
   "version": "0.0.4",
   "name": "gaxabara-optional-ts",

@@ -1,15 +1,11 @@
 import { Optional } from '../src/Optional';
 
-const presetValueFn = (value: String) => {
+const identifyFn = (value: String) => {
     return (input: String) => value;
 };
 
-const presetOptionalValueFn = (value: String) => {
+const identityOptionalFn = (value: String) => {
     return (input: string): Optional<String> => new Optional(value);
-};
-
-const errorOnInvokeFn = (errorMsg: string) => {
-    return (_: string) => new Error(errorMsg);
 };
 
 describe('Optional.empty', () => {
@@ -50,18 +46,19 @@ describe('Optional.empty', () => {
 
     describe('ifPresentOrElse', () => {
         it('invokes the emptyFn when no value is present', () => {
-            let argument = "notSet";
+            let argument = 'notSet';
             const consumer = () => {
-                argument = "set";
+                argument = 'set';
             };
             opt.ifPresentOrElse(() => {}, consumer);
-            expect(argument).toBe("set");
+            expect(argument).toBe('set');
         });
     });
 
     it('does not invoke the filter function', (done) => {
         opt.filter((_: String): boolean => {
             done(new Error('Should not be invoked'));
+
             return false;
         });
         done();
@@ -71,6 +68,7 @@ describe('Optional.empty', () => {
         try {
             expect(opt.map((_: String): boolean => {
                 done(new Error('Should not be invoked'));
+
                 return true;
             }).get());
             done(new Error('Should not be reach this point'));
@@ -239,7 +237,7 @@ describe('Optional.of', () => {
 
     describe('map', () => {
         it('creates an empty optional when the mapper returns null', (done) => {
-            const result = opt.map(presetValueFn(undefined));
+            const result = opt.map(identifyFn(undefined));
             try {
                 result.get();
                 done(new Error('Evaluating empty optional'));
@@ -249,7 +247,7 @@ describe('Optional.of', () => {
         });
 
         it('creates an optional when the mapper returns not null', () => {
-            const result = opt.map(presetValueFn('goodbye'));
+            const result = opt.map(identifyFn('goodbye'));
             expect(result.get()).toBe('goodbye');
         });
     });
@@ -262,6 +260,10 @@ describe('Optional.of', () => {
             } catch (err) {
                 done();
             }
+        });
+
+        it('returns the value', () => {
+            expect(opt.flatMap(identityOptionalFn('flatMap')).get()).toBe('flatMap');
         });
     });
 
@@ -287,9 +289,9 @@ describe('Optional.of', () => {
 
     it('stream does not return immediately', () => {
         let total = 0;
-        let result:string = 'notset';
+        let result: string = 'notset';
 
-        for (let value of opt) {
+        for (const value of opt) {
             total++;
             result = value;
         }

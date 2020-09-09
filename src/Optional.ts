@@ -1,8 +1,8 @@
-function isNullOrUndefined(value: any): boolean {
+function isNullOrUndefined<T> (value: T): boolean {
   return (value === undefined || value === null);
 }
 
-function assertOn(condition: boolean, errorMessage: string): void {
+function assertOn (condition: boolean, errorMessage: string): void {
   if (condition) {
     throw new Error(errorMessage);
   }
@@ -63,7 +63,7 @@ export class Optional<T> {
    * @throws error if no value is present
    */
   // tslint:disable-next-line: no-reserved-keywords
-  get(): T {
+  get (): T {
     assertOn(this.isEmpty(), 'Can not invoke get on Optional with null/undefined value');
 
     return this.#value;
@@ -72,14 +72,14 @@ export class Optional<T> {
   /**
    * If a value is not present, returns true, otherwise false.
    */
-  isEmpty(): boolean {
+  isEmpty (): boolean {
     return isNullOrUndefined(this.#value);
   }
 
   /**
    * Returns true if there is a value present, otherwise false.
    */
-  isPresent(): boolean {
+  isPresent (): boolean {
     return !this.isEmpty();
   }
 
@@ -88,7 +88,7 @@ export class Optional<T> {
    *
    * @param fn with the value as an argument
    */
-  ifPresent(fn?: (value: T) => void) {
+  ifPresent (fn?: (value: T) => void) {
     if (this.isPresent()) {
       fn(this.#value);
     }
@@ -100,7 +100,7 @@ export class Optional<T> {
    * @param nonEmptyFn the function to be invoked, if a value is present with that value as argument.
    * @param emptyFn the empty-based action to be invoked, if no value is present.
    */
-  ifPresentOrElse(nonEmptyFn: (value: T) => void, emptyFn: () => void): void {
+  ifPresentOrElse (nonEmptyFn: (value: T) => void, emptyFn: () => void): void {
     if (this.isPresent()) {
       nonEmptyFn(this.#value);
     } else {
@@ -114,7 +114,7 @@ export class Optional<T> {
    *
    * @param fn filter function that takes the value as an argument.
    */
-  filter(fn: (value: T) => boolean): Optional<T> {
+  filter (fn: (value: T) => boolean): Optional<T> {
     if (this.isEmpty()) {
       return this;
     } else {
@@ -179,7 +179,7 @@ export class Optional<T> {
    *
    * @throws if provided function produces a null result.
    */
-  or(fn: () => Optional<T>): Optional<T> {
+  or (fn: () => Optional<T>): Optional<T> {
     if (this.isPresent()) {
       return this;
     } else {
@@ -204,7 +204,7 @@ export class Optional<T> {
   /**
    * If a value is present, returns an iterable containing only that value, otherwise returns an empty iterable.
    */
-  *[Symbol.iterator]() {
+  *[Symbol.iterator] () {
     if (this.isPresent()) {
       yield this.#value;
     }

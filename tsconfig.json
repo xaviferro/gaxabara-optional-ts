@@ -11,18 +11,17 @@
   ],
   "compilerOptions": {
     "target": "es2015",
-    "downlevelIteration": true,
-    "module": "commonjs",
+    "module": "es6",
     "removeComments": true,
     "lib": [
       "es2015",
       "dom"
     ],
     "declaration": true,
-    "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
+    "allowJs": true,
     "noImplicitAny": true,
     "strictNullChecks": false,
     "strictFunctionTypes": true,

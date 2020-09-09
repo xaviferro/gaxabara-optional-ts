@@ -27,7 +27,7 @@
     "build": "webpack",
     "test": "jest --coverage --verbose --config jestconfig.json"
   },
-  "version": "0.0.4",
+  "version": "0.0.5",
   "name": "gaxabara-optional-ts",
   "description": "Optionals in Typescript",
   "author": {

@@ -1,6 +1,6 @@
 {
-  "main": "dist/optional.js",
-  "types": "dist/optional.d.ts",
+  "main": "dist/Optional.js",
+  "types": "dist/Optional.d.ts",
   "devDependencies": {
     "@babel/preset-typescript": "^7.10.4",
     "@types/jest": "^26.0.3",
